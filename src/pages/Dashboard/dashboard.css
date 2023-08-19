@@ -1,0 +1,91 @@
+#main{
+    display:flex;
+}
+
+#scroll{
+    height: 88vh;
+    overflow: auto;
+}
+
+#divbuttons{
+    display:flex;
+    justify-content: center;
+    margin-left:7%;
+}
+
+
+#modalinput{
+    width: 100%;
+    margin-top: 2%;
+    height: 15vh;
+    border-radius: 3px;
+}
+
+.button2{
+    width: 60%;
+    margin-left:3%;
+    margin-right:10%;
+    margin-top:7%;
+    height:4vh;
+    border:rgb(120, 120, 170);
+    background-color:#1D9BF0;
+    color:rgb(230, 227, 227);
+    border-radius: 2px;
+    font-weight: bold;
+    font-size: medium;
+    box-shadow: 0px 5px 5px #eceaea;
+}
+
+#left{
+    width:15%;
+    height:100vh;
+    padding-left: 1%;
+    background-color: aliceblue;
+    border-right: solid 1px #1D9BF0;
+}
+
+#home{
+    display:flex;
+    align-items: center;
+    padding-left: 3%;
+}
+
+#middle{
+    width:65%;
+    height:100vh;
+}
+
+#header{
+    display: flex;
+    background-color:#bee0f7;
+    padding-left:5%;
+}
+
+#right{
+    width:20%;
+    height:100vh;
+    background-color: aliceblue;
+    border-left: solid 1px #1D9BF0;
+}
+
+.input2{
+    margin-top: 3%;
+    margin-left:3%;
+    margin-right:3%;
+    height:6vh;
+    width:90%;
+    border:solid 2px rgb(231, 223, 223);
+    border-radius: 2px;
+    padding-left: 2%;
+}
+
+#find{
+    padding-bottom: 5%;
+    border-bottom: solid 2px rgb(231, 223, 223);
+}
+
+#followers{
+    display:flex;
+    flex-direction: column;
+    padding-left: 4%;
+}

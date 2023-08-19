@@ -1,0 +1,75 @@
+#registerBack{
+    background-color: aliceblue;
+    height:100vh;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#icon{
+    display:flex;
+    justify-content: center;
+    margin-top:5%;
+}
+
+#diff{
+    display: flex;
+    justify-content: center;
+    color:rgb(134, 136, 138)
+}
+
+.input{
+    margin-top: 3%;
+    margin-left:10%;
+    margin-right:10%;
+    height:6vh;
+    border:solid 2px rgb(231, 223, 223);
+    border-radius: 2px;
+    padding-left: 1%;
+}
+
+#registerButton{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 5%;
+}
+
+.button:hover{
+    cursor: pointer;
+}
+
+
+.button{
+    width: 80%;
+    margin-left:10%;
+    margin-right:10%;
+    height:6vh;
+    border:rgb(120, 120, 170);
+    background-color:#1D9BF0;
+    color:rgb(230, 227, 227);
+    border-radius: 2px;
+    font-weight: bold;
+    font-size: large;
+    box-shadow: 0px 5px 5px #eceaea;
+
+}
+
+#title{
+    display:flex;
+    justify-content: center ;
+    font-size:5vh;
+}
+
+#input{
+    display:flex;
+    flex-direction: column;
+}
+
+#registerBox{
+    background-color: white;
+    height:70%;
+    width:25%;
+    border:solid 5px rgb(227, 224, 224);
+    border-radius: 2px;
+}
