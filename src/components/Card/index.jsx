@@ -2,8 +2,10 @@ import React from "react";
 import './card.css'
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Card({id,text,date,name,setChangeTweets,changeTweets}){
+    const navigate=useNavigate();
     const month=new Date(date).getMonth();
     const year=new Date(date).getFullYear();
     const day=new Date(date).getDate();
@@ -30,8 +32,8 @@ function Card({id,text,date,name,setChangeTweets,changeTweets}){
                 setChangeTweets(!changeTweets);
                 setInputBox(false);
             }).catch((err)=>{
-                console.log(err.response);
-                alert(err.response);
+                alert(err.response.data);
+                navigate('/login');
             })
         }
     }
@@ -49,6 +51,7 @@ function Card({id,text,date,name,setChangeTweets,changeTweets}){
             setInputBox(false);
         }).catch((err)=>{
             alert(err.response.data);
+            navigate('/login');
         })
     }
 

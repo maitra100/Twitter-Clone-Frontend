@@ -9,6 +9,7 @@ import axios from 'axios'
 import Modal from 'react-modal';
 import FeedCard from '../../components/FeedCard'
 import FollowCard from "../../components/FollowCard";
+import { useNavigate } from "react-router-dom";
 
 const customStyles = {
     content: {
@@ -26,6 +27,7 @@ const customStyles = {
   };
 
 function Dashboard(){
+    const navigate=useNavigate();
     const [followers,setFollowers]=useState([]);
     const [tweetIds,setTweetIds]=useState([]);
     const [changefollowers,setChangeFollowers]=useState(true);
@@ -37,6 +39,52 @@ function Dashboard(){
     const [feed,setFeed]=useState([]);
     const [field,setField]=useState('');
     const [follower,setFollwer]=useState(true);
+    const [openBox,setOpenBox]=useState(false);
+    const [people,setPeople]=useState(undefined);
+
+    const changeFeed=async(id,myName)=>{
+        let token=localStorage.getItem('token');
+        axios.get(`http://localhost:3001/tweets/${id}`,{
+            headers:{
+                token:token
+            }
+        }).then((result)=>{
+            console.log(result.data,"tweets");
+            setFeed(result.data);
+            changeSection(myName);
+            setOpenBox(false);
+            setField('');
+        }).catch((err)=>{
+            alert(err.response.data);
+            navigate('/login');
+        });
+    }
+
+    const getPeople=(e)=>{
+        setPeople(undefined);
+        setField(e.target.value);
+        const token=localStorage.getItem('token');
+        setTimeout(()=>{
+            let search=e.target.value;
+            console.log(search,'1');
+        search=search.split(' ').join('');
+        if(search.length===0)
+        return ;
+            axios.get(`http://localhost:3001/getUsers/${e.target.value}`,{
+                headers:{
+                    token:token
+                }
+            }).then((res)=>{
+                console.log(res.data);
+                setPeople(res.data);
+            }).catch((err)=>{
+                alert(err.response.data);
+                navigate('/login');
+            })
+        },1000)
+    }
+
+
 
     const checkfollower=async(name)=>{
         const token=localStorage.getItem('token');
@@ -50,7 +98,8 @@ function Dashboard(){
             fId=response.data;
         }
         catch(e){
-            alert(e.message);
+            alert(e.response.data);
+            navigate('/login');
         }
         console.log(fId,'fId');
         let bool=false;
@@ -74,11 +123,18 @@ function Dashboard(){
     const update=async()=>{
         let token=localStorage.getItem('token');
         let id=localStorage.getItem('id');
-        let response=await axios.get(`http://localhost:3001/following/${id}`,{
+        let response;
+        try{
+            response=await axios.get(`http://localhost:3001/following/${id}`,{
             headers:{
                 token:token
             }
         })
+        }
+        catch(e){
+            alert(e.response.data);
+            navigate('/login');
+        }
         console.log(response.data,"last")
         setFollowers(response.data);
         let fId;
@@ -91,7 +147,8 @@ function Dashboard(){
             fId=response.data;
         }
         catch(e){
-            alert(e.message);
+            alert(e.response.data);
+            navigate('/login');
         }
         console.log(fId,'fId');
         let bool=false;
@@ -109,11 +166,18 @@ function Dashboard(){
     const unfollow=async ()=>{
         const userId=localStorage.getItem('id');
         const token=localStorage.getItem('token');
-        let response=await axios.get(`http://localhost:3001/userId/${section}`,{
+        let response;
+        try{
+            response=await axios.get(`http://localhost:3001/userId/${section}`,{
             headers:{
                 token:token
             }
         });
+        }
+        catch(e){
+            alert(e.response.data);
+            navigate('/login');
+        }
         let id=response.data;
         axios.put('http://localhost:3001/following',{
             userId:userId,
@@ -127,17 +191,25 @@ function Dashboard(){
             update();
         }).catch((err)=>{
             alert(err.response.data);
+            navigate('/login');
         })
     }
 
     const follow=async()=>{
         const userId=localStorage.getItem('id');
         const token=localStorage.getItem('token');
-        let response=await axios.get(`http://localhost:3001/userId/${section}`,{
+        let response;
+        try{
+            response=await axios.get(`http://localhost:3001/userId/${section}`,{
             headers:{
                 token:token
             }
         });
+        }
+        catch(e){
+            alert(e.response.data);
+            navigate('/login');
+        }
         let id=response.data;
         axios.put('http://localhost:3001/following',{
             userId:userId,
@@ -151,6 +223,7 @@ function Dashboard(){
             update();
         }).catch((err)=>{
             alert(err.response.data);
+            navigate('/login');
         })
     }
 
@@ -169,8 +242,10 @@ function Dashboard(){
             setChangeTweets(!changeTweets);
             setSection('My Profile');
             setModalOpen(false);
+            setTweetInput('');
         }).catch((err)=>{
             alert(err.response.data);
+            navigate('/login');
         })
     }
 
@@ -184,7 +259,10 @@ function Dashboard(){
         }).then((result)=>{
             console.log(result);
             setName(result.data.name);
-        }).catch((err)=>alert(err.message));
+        }).catch((err)=>{
+            alert(err.response.data);
+            navigate('/login');
+        });
     },[name])
 
     useEffect(()=>{
@@ -198,7 +276,10 @@ function Dashboard(){
         }).then((result)=>{
             console.log(result.data,"tweets");
             setTweetIds(result.data);
-        }).catch((err)=>alert(err.message));
+        }).catch((err)=>{
+            alert(err.response.data);
+            navigate('/login');
+        });
     },[changeTweets])
 
     useEffect(()=>{
@@ -211,6 +292,7 @@ function Dashboard(){
         }).then(async(result)=>{
             setFollowers(result.data);
             console.log(result.data,'followers');
+            setFeed([]);
             let tweets=[];
             result.data.map(async (res)=>{
                 return axios.get(`http://localhost:3001/tweets/${res.userId}`,{
@@ -225,10 +307,14 @@ function Dashboard(){
                     })
                     setFeed(tweets);
                 }).catch((err)=>{
-                    console.log(err)
+                    alert(err.response.data);
+                    navigate('/login');
                 })
             }) 
 
+        }).catch((err)=>{
+            alert(err.response.data);
+            navigate('/login');
         })
     },[changefollowers])
 
@@ -245,7 +331,11 @@ function Dashboard(){
                     <img src={Profile} alt="Home" width="20px" height="20px"/>
                     <p style={{'paddingLeft':'5%','cursor':'pointer'}} onClick={()=>changeSection('My Profile')}>My Profile</p>
                 </div>
-                <button className="button2" onClick={setModalOpen}>Tweet</button>
+                <button className="button2" style={{'cursor':'pointer'}} onClick={setModalOpen}>Tweet</button>
+                <button className="button2" style={{'cursor':'pointer'}} onClick={()=>{
+                    navigate('/login');
+                    localStorage.clear();
+                }}>Log Out</button>
                 <Modal isOpen={modalOpen} onRequestClose={() => setModalOpen(false)} style={customStyles}>
                     <div id="modalBox">
                         <div id="modalheader">
@@ -253,10 +343,10 @@ function Dashboard(){
                         </div>
                         <textarea id="modalinput" onChange={(e)=>setTweetInput(e.target.value)} value={tweetInput} placeholder="Input" />
                         <div id="divbuttons">
-                        <button className="button2" onClick={() => setModalOpen(false)}>
+                        <button className="button2" style={{'cursor':'pointer'}} onClick={() => setModalOpen(false)}>
                             Cancel
                         </button>
-                        <button className="button2" onClick={addTweet}>
+                        <button className="button2" style={{'cursor':'pointer'}} onClick={addTweet}>
                             Create
                         </button>
                         </div>
@@ -266,10 +356,10 @@ function Dashboard(){
             <div id="middle">
                 <div id="header">
                     <h3>{section}</h3>
-                    {section!=='My Profile' && section!=='Home' && follower && (<button className="button3" onClick={unfollow}>
+                    {section!=='My Profile' && section!=='Home' && follower && (<button className="button4" style={{'cursor':'pointer'}} onClick={unfollow}>
                             Unfollow
                         </button>)}
-                        {section!=='My Profile' && section!=='Home' && !follower && (<button className="button3" onClick={follow}>
+                        {section!=='My Profile' && section!=='Home' && !follower && (<button className="button4" style={{'cursor':'pointer'}} onClick={follow}>
                             Follow
                         </button>)}
                 </div>
@@ -301,13 +391,18 @@ function Dashboard(){
             </div>
             <div id="right">
                 <div id="find">
-                <input className="input2" type="text" placeholder="Search" onClick={(e)=>setField(e.target.value)}/>
+                <input className="input2" type="text" placeholder="Search" onChange={getPeople} onClick={()=>setOpenBox(true)} value={field}/>
+                </div>
+                <div id="open">
+                {openBox && people && people.map((folk)=>{
+                    console.log(folk);
+                    return (<div id="inside" style={{'cursor':'pointer'}} onClick={()=>changeFeed(folk.userId,folk.name)}>{folk.name}</div>)})}
                 </div>
                 <div id="followers">
                     <p>Following</p>
                     {followers && followers.map((res)=>{
                         return (<div>
-                            <FollowCard key={res._id} id={res.userId} name={res.name} setChangeFollowers={setChangeFollowers} changefollowers={changefollowers} setSection={changeSection} setFeed={setFeed}/>
+                            <FollowCard key={res._id} id={res.userId} name={res.name} setChangeFollowers={setChangeFollowers} changefollowers={changefollowers} setSection={changeSection} setFeed={setFeed} section={section} update={update}/>
                         </div>)
                     })}
                 </div>
