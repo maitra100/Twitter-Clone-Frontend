@@ -16,9 +16,9 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 There are two other services that collaborate with this service. 
 
 1) Backend Service: This handles all the logical part which include DB manipulation.
-Env keys: 1) PORT
+Env keys: 1) PORT=3001
 Link: https://github.com/maitra100/Twitter-Clone-Backend
 
 2) Auth Service:This handles the user registration,login and token validation part.
-env keys: 1)PORT 2)SECRET_KEY (for jwt)
+env keys: 1)PORT=3000 2)SECRET_KEY (for jwt)
 Link: https://github.com/maitra100/Twitter-Clone-Auth
